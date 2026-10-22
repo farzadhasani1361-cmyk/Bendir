@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>ریتم‌یاب بندیر</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: one narrow column, phone first. Hero = tempo + bendir; below: tracks, pattern, mix. */
+:root{
+  --bg:#EDF0F3; --surface:#FFFFFF; --surface2:#E3E8ED; --ink:#14212C; --muted:#566676; --line:#D0D8E0;
+  --accent:#1B5DA8; --accent-ink:#FFFFFF; --dum:#C23B22; --tek:#16808D;
+  --font:'Vazirmatn',system-ui,Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1821; --surface:#16232E; --surface2:#1E3040; --ink:#E8EEF3; --muted:#93A4B3; --line:#27394A;
+    --accent:#5AA2E6; --accent-ink:#06121C; --dum:#F0674D; --tek:#4CC3CF; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1821; --surface:#16232E; --surface2:#1E3040; --ink:#E8EEF3; --muted:#93A4B3; --line:#27394A;
+  --accent:#5AA2E6; --accent-ink:#06121C; --dum:#F0674D; --tek:#4CC3CF; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px}
+.app{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+h1{font-size:22px;font-weight:800;margin:0}
+h2{font-size:14px;font-weight:700;margin:0;color:var(--muted);letter-spacing:.02em}
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-top:4px}
+.top small{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+button,select,input{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible,label:focus-within{outline:3px solid var(--accent);outline-offset:2px}
+.btn{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:8px 14px;min-height:44px;font-weight:500}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent;font-weight:700}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row.between{justify-content:space-between}
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}
+.now{min-width:0}
+.now .name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bpm{font-size:60px;white-space:nowrap;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
+.bpm small{font-size:15px;font-weight:500;color:var(--muted);margin-inline-start:6px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip{font-size:12px;padding:2px 10px;border-radius:99px;background:var(--surface2);color:var(--muted);border:1px solid var(--line)}
+.drum{width:132px;height:132px;position:relative;flex:none}
+.drum .rim{position:absolute;inset:0;border-radius:50%;background:var(--surface2);border:6px solid var(--muted);opacity:.95}
+.drum .skin{position:absolute;inset:12px;border-radius:50%;background:var(--surface);border:2px solid var(--line);transition:transform .08s,background .08s}
+.drum .jing{position:absolute;inset:0;border-radius:50%}
+.drum .jing i{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--muted);left:calc(50% - 5px);top:-1px;transform-origin:5px 67px}
+.drum.hitD .skin{transform:scale(.93);background:var(--dum)}
+.drum.hitT .skin{transform:scale(.96);background:var(--tek)}
+.drum.hitk .skin{transform:scale(.98);background:var(--tek);opacity:.7}
+.play{width:100%;min-height:56px;font-size:18px;border-radius:14px}
+/* tempo */
+.tempo{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;direction:ltr}
+.tempo .btn{min-width:48px;padding:8px 10px}
+input[type=range]{width:100%;accent-color:var(--accent);height:34px;margin:0}
+.quick{display:flex;gap:8px;flex-wrap:wrap}
+.quick .btn{flex:1 1 auto;padding:8px 10px}
+/* tracks */
+.file{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border:2px dashed var(--accent);border-radius:12px;color:var(--accent);font-weight:700;cursor:pointer;text-align:center}
+.file input{position:absolute;opacity:0;width:1px;height:1px}
+.tracks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.track{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);cursor:pointer}
+.track[aria-current="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.track .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.track .b{font-variant-numeric:tabular-nums;font-weight:700;direction:ltr}
+.track .x{border:0;background:none;color:var(--muted);padding:4px 8px;min-height:36px}
+.hint{color:var(--muted);font-size:13px;margin:0}
+/* pattern */
+select{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:44px;max-width:100%}
+.grid{display:grid;gap:6px;direction:ltr}
+.step{height:48px;min-width:0;border-radius:9px;border:1px solid var(--line);background:var(--bg);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;padding:0;color:var(--muted)}
+.step.D{background:var(--dum);color:#fff;border-color:transparent}
+.step.T{background:var(--tek);color:#fff;border-color:transparent}
+.step.k{background:transparent;color:var(--tek);border-color:var(--tek)}
+.step.beat{border-bottom:3px solid var(--muted)}
+.step.now{outline:3px solid var(--accent);outline-offset:-2px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend b{color:var(--ink)}
+/* mix */
+.field{display:grid;grid-template-columns:96px 1fr 56px;gap:10px;align-items:center}
+.field output{direction:ltr;text-align:left;color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px}
+.err{color:var(--dum);font-size:13px;margin:0}
+@media (max-width:420px){.bpm{font-size:50px}.bpm small{display:block;margin:0}.drum{width:104px;height:104px}.drum .jing i{transform-origin:5px 53px}}
+@media (prefers-reduced-motion:reduce){.drum .skin{transition:none}}
+</style>
+
+<div class="app" dir="rtl" lang="fa">
+  <div class="top"><h1>ریتم‌یاب بندیر</h1><small>تمپو را پیدا کن، با بندیر همراهی کن</small></div>
+
+  <section class="card" aria-label="پخش">
+    <div class="hero">
+      <div class="now">
+        <div class="name" id="curName">بدون آهنگ، بندیر آزاد</div>
+        <div class="bpm"><span id="bpmNum">100</span><small>BPM</small></div>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="drum" id="drum" aria-hidden="true"><div class="rim"></div><div class="skin"></div><div class="jing" id="jing"></div></div>
+    </div>
+    <button class="btn primary play" id="playBtn">▶ پخش</button>
+    <div class="tempo">
+      <button class="btn" id="m5" aria-label="پنج کمتر">−5</button>
+      <input type="range" id="bpmRange" min="30" max="240" step="1" value="100" aria-label="تمپو">
+      <button class="btn" id="p5" aria-label="پنج بیشتر">+5</button>
+    </div>
+    <div class="quick">
+      <button class="btn" id="m1">−۱</button>
+      <button class="btn" id="p1">+۱</button>
+      <button class="btn" id="half">نصف</button>
+      <button class="btn" id="dbl">دو برابر</button>
+      <button class="btn" id="tap">ضرب‌گیر</button>
+      <button class="btn" id="reset">تمپوی آهنگ</button>
+    </div>
+    <p class="hint" id="rateHint" hidden></p>
+  </section>
+
+  <section class="card" aria-label="آهنگ‌ها">
+    <h2>آهنگ‌ها</h2>
+    <label class="file" for="files"><span>＋ انتخاب فایل آهنگ (چند فایل)</span><input type="file" id="files" accept="audio/*,.mp3,.m4a,.wav,.ogg,.flac,.aac" multiple></label>
+    <p class="err" id="err" hidden></p>
+    <ul class="tracks" id="tracks"></ul>
+    <p class="hint" id="trackHint">فایل‌ها فقط روی همین گوشی پردازش می‌شوند و جایی ارسال نمی‌شوند.</p>
+  </section>
+
+  <section class="card" aria-label="الگوی بندیر">
+    <div class="row between"><h2>الگوی بندیر</h2>
+      <select id="preset" aria-label="انتخاب الگو"></select></div>
+    <div class="grid" id="grid"></div>
+    <div class="legend"><span><b>D</b> دوم (صدای بم)</span><span><b>T</b> تک (صدای تیز)</span><span><b>k</b> تک آرام</span><span>برای تغییر روی خانه بزن</span></div>
+    <div class="row">
+      <span class="chip" style="border:0;background:none">گام در هر ضرب</span>
+      <div class="row" id="subdiv"></div>
+    </div>
+    <div class="row">
+      <button class="btn" id="shiftL">شروع الگو ◀</button>
+      <button class="btn" id="shiftR">▶ شروع الگو</button>
+      <button class="btn" id="lenM">− گام</button>
+      <button class="btn" id="lenP">+ گام</button>
+    </div>
+  </section>
+
+  <section class="card" aria-label="میکس">
+    <h2>صدا و همگام‌سازی</h2>
+    <div class="field"><label for="volSong">آهنگ</label><input type="range" id="volSong" min="0" max="100" value="80"><output id="volSongO">80</output></div>
+    <div class="field"><label for="volBen">بندیر</label><input type="range" id="volBen" min="0" max="100" value="85"><output id="volBenO">85</output></div>
+    <div class="field"><label for="nudge">جابه‌جایی</label><input type="range" id="nudge" min="-250" max="250" step="5" value="0"><output id="nudgeO">0 ms</output></div>
+    <p class="hint">اگر بندیر کمی جلو یا عقب است، «جابه‌جایی» را تنظیم کن. بلوتوث و هدفون معمولاً چند ده میلی‌ثانیه تأخیر دارند.</p>
+    <label class="row" style="gap:10px;min-height:44px"><input type="checkbox" id="songOn" checked style="width:22px;height:22px;accent-color:var(--accent)"><span>پخش خود آهنگ همراه بندیر</span></label>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const clamp = (v,a,b) => Math.min(b,Math.max(a,v));
+const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+/* ---------- Patterns ---------- */
+const PRESETS = [
+  {name:'۴/۴ دوم‌تک', steps:'D.T.D.T.', sub:2},
+  {name:'۲/۴ ساده', steps:'D.T.', sub:2},
+  {name:'سمائی ۳/۴', steps:'D.T.T.', sub:2},
+  {name:'سوفیان ۴/۴', steps:'D.TTD.T.', sub:2},
+  {name:'دویک ۸/۸', steps:'DT.TDDT.', sub:2},
+  {name:'۶/۸', steps:'D.kT.k', sub:3},
+  {name:'آقساق ۹/۸ (۲+۲+۲+۳)', steps:'D.T.D.T.T', sub:3},
+  {name:'دور روان ۷/۸ (۳+۲+۲)', steps:'D..T.T.', sub:1},
+  {name:'سفارشی', steps:'D.T.D.T.', sub:2}
+];
+let pattern = {steps:PRESETS[0].steps.split(''), sub:PRESETS[0].sub, shift:0, preset:0};
+
+/* ---------- Audio engine ---------- */
+let ctx=null, master, benGain, noiseBuf;
+function ensureCtx(){
+  if(!ctx){
+    ctx = new (window.AudioContext||window.webkitAudioContext)();
+    master = ctx.createGain(); master.connect(ctx.destination);
+    benGain = ctx.createGain(); benGain.gain.value = +$('volBen').value/100; benGain.connect(master);
+    noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+    const d = noiseBuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  }
+  if(ctx.state==='suspended') ctx.resume();
+}
+function noise(dest, when, dur, type, freq, q, gain){
+  const s = ctx.createBufferSource(); s.buffer = noiseBuf;
+  const f = ctx.createBiquadFilter(); f.type=type; f.frequency.value=freq; f.Q.value=q;
+  const g = ctx.createGain(); g.gain.setValueAtTime(gain, when); g.gain.exponentialRampToValueAtTime(0.0008, when+dur);
+  s.connect(f); f.connect(g); g.connect(dest);
+  s.start(when, Math.random()*0.5); s.stop(when+dur+0.02);
+}
+function tone(dest, when, f0, f1, dur, gain){
+  const o = ctx.createOscillator(); o.type='sine';
+  o.frequency.setValueAtTime(f0, when); o.frequency.exponentialRampToValueAtTime(f1, when+dur*0.4);
+  const g = ctx.createGain(); g.gain.setValueAtTime(gain, when); g.gain.exponentialRampToValueAtTime(0.0008, when+dur);
+  o.connect(g); g.connect(dest); o.start(when); o.stop(when+dur+0.02);
+}
+/* Bendir: deep skin "düm" at the centre, bright "tek" at the rim, snare-wire buzz on both. */
+function hit(kind, when){
+  if(kind==='D'){
+    tone(benGain, when, 150, 62, 0.5, 1.0);
+    noise(benGain, when, 0.09, 'lowpass', 500, 0.7, 0.7);
+    noise(benGain, when, 0.32, 'highpass', 5200, 0.7, 0.10);
+  } else if(kind==='T'){
+    tone(benGain, when, 300, 210, 0.09, 0.30);
+    noise(benGain, when, 0.11, 'bandpass', 2400, 1.1, 0.85);
+    noise(benGain, when, 0.22, 'highpass', 5200, 0.7, 0.16);
+  } else if(kind==='k'){
+    tone(benGain, when, 280, 200, 0.06, 0.12);
+    noise(benGain, when, 0.07, 'bandpass', 2600, 1.1, 0.35);
+    noise(benGain, when, 0.12, 'highpass', 5200, 0.7, 0.07);
+  }
+}
+
+/* ---------- Tempo analysis ---------- */
+function makeFFT(N){
+  const bits=Math.log2(N), rev=new Uint16Array(N), cs=new Float32Array(N/2), sn=new Float32Array(N/2);
+  for(let i=0;i<N;i++){let r=0;for(let b=0;b<bits;b++) if(i&(1<<b)) r|=1<<(bits-1-b); rev[i]=r;}
+  for(let i=0;i<N/2;i++){cs[i]=Math.cos(2*Math.PI*i/N); sn[i]=-Math.sin(2*Math.PI*i/N);}
+  return (re,im)=>{
+    for(let i=0;i<N;i++){const j=rev[i]; if(j>i){let t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t;}}
+    for(let size=2;size<=N;size<<=1){
+      const half=size>>1, step=N/size;
+      for(let i=0;i<N;i+=size){
+        for(let j=i,k=0;j<i+half;j++,k+=step){
+          const l=j+half, tr=re[l]*cs[k]-im[l]*sn[k], ti=re[l]*sn[k]+im[l]*cs[k];
+          re[l]=re[j]-tr; im[l]=im[j]-ti; re[j]+=tr; im[j]+=ti;
+        }
+      }
+    }
+  };
+}
+const yieldUI = () => new Promise(r=>setTimeout(r,0));
+
+async function analyze(buf){
+  const sr0=buf.sampleRate, nch=buf.numberOfChannels, len=buf.length;
+  const f=Math.max(1,Math.round(sr0/22050)), sr=sr0/f;
+  const maxSec=100, total=len/sr0;
+  const t0 = total>maxSec ? Math.min(total*0.1, total-maxSec) : 0;
+  const s0=Math.floor(t0*sr0), s1=Math.min(len, s0+Math.floor(maxSec*sr0));
+  const n=Math.floor((s1-s0)/f), x=new Float32Array(n);
+  for(let c=0;c<nch;c++){
+    const d=buf.getChannelData(c);
+    for(let i=0;i<n;i++){let s=0; const b=s0+i*f; for(let j=0;j<f;j++) s+=d[b+j]; x[i]+=s/f/nch;}
+  }
+  const N=1024, hop=256, hopSec=hop/sr, fft=makeFFT(N);
+  const m=Math.floor((n-N)/hop);
+  if(m<400) throw new Error('آهنگ خیلی کوتاه است');
+  const win=new Float32Array(N); for(let i=0;i<N;i++) win[i]=0.5-0.5*Math.cos(2*Math.PI*i/N);
+  const re=new Float32Array(N), im=new Float32Array(N), prev=new Float32Array(N/2), env=new Float32Array(m);
+  for(let fr=0;fr<m;fr++){
+    const b=fr*hop;
+    for(let i=0;i<N;i++){re[i]=x[b+i]*win[i]; im[i]=0;}
+    fft(re,im);
+    let flux=0;
+    for(let k=2;k<N/2;k++){
+      const lm=Math.log1p(Math.sqrt(re[k]*re[k]+im[k]*im[k])*20);
+      const d=lm-prev[k]; if(d>0) flux+=d; prev[k]=lm;
+    }
+    env[fr]=flux;
+    if(fr%600===0) await yieldUI();
+  }
+  // remove slow trend
+  const W=43, cum=new Float64Array(m+1); for(let i=0;i<m;i++) cum[i+1]=cum[i]+env[i];
+  let sum=0;
+  for(let i=0;i<m;i++){
+    const a=Math.max(0,i-W), b=Math.min(m,i+W+1), avg=(cum[b]-cum[a])/(b-a);
+    env[i]=Math.max(0,env[i]-avg); sum+=env[i];
+  }
+  const mean=sum/m; for(let i=0;i<m;i++) env[i]-=mean*0.5;
+  // autocorrelation over plausible beat periods
+  const Lmin=Math.floor(60/220/hopSec), Lmax=Math.ceil(60/45/hopSec), top=Math.min(4*Lmax, (m>>1)-1);
+  const acf=new Float32Array(top+1);
+  for(let L=Lmin;L<=top;L++){let s=0; for(let i=0;i+L<m;i++) s+=env[i]*env[i+L]; acf[L]=s/(m-L);}
+  let best=-1,bestL=Lmin,tot=0,cnt=0;
+  for(let L=Lmin;L<=Lmax;L++){
+    const bpm=60/(L*hopSec);
+    const prior=Math.exp(-0.5*Math.pow(Math.log2(bpm/115)/0.9,2));
+    const sc=(acf[L]+0.5*(acf[2*L]||0)+0.25*(acf[4*L]||0))*prior;
+    tot+=sc; cnt++;
+    if(sc>best){best=sc;bestL=L;}
+  }
+  const conf=clamp((best/(tot/cnt)-1)/3,0,1);
+  // refine with a beat comb
+  const val=(pos)=>{const i=Math.floor(pos); if(i<0||i+1>=m) return 0; const fr=pos-i; return env[i]*(1-fr)+env[i+1]*fr;};
+  const comb=(P,step)=>{
+    let bs=-1,bp=0;
+    for(let ph=0;ph<P;ph+=step){let s=0,c=0; for(let pos=ph;pos<m-1;pos+=P){s+=val(pos);c++;} s/=c; if(s>bs){bs=s;bp=ph;}}
+    return {s:bs,ph:bp};
+  };
+  let bestP=bestL, bestS=-1;
+  for(let r=0.96;r<=1.04;r+=0.001){const P=bestL*r, res=comb(P,1); if(res.s>bestS){bestS=res.s;bestP=P;}}
+  const fin=comb(bestP,0.25);
+  const bpm=60/(bestP*hopSec);
+  const beatSec=bestP*hopSec;
+  // frame i covers samples [i*hop, i*hop+N); the attack shows up roughly a third into the window
+  let first=t0+(fin.ph*hop+N*0.55)/sr;
+  const q=Math.floor(first/beatSec); first-=q*beatSec;
+  // meter: which beat in a group carries the most energy
+  const s=[]; for(let pos=fin.ph;pos<m-2;pos+=bestP){const c=Math.round(pos); s.push(Math.max(env[c-1]||0,env[c]||0,env[c+1]||0));}
+  const sm=s.reduce((a,b)=>a+b,0)/s.length, sd=Math.sqrt(s.reduce((a,b)=>a+(b-sm)*(b-sm),0)/s.length);
+  const sc=(mm)=>{const sums=new Array(mm).fill(0),cn=new Array(mm).fill(0); s.forEach((v,i)=>{sums[i%mm]+=v;cn[i%mm]++;});
+    let bv=-1,bi=0; sums.forEach((v,i)=>{const a=v/cn[i]; if(a>bv){bv=a;bi=i;}}); return {sc:(bv-sm)/(sd+1e-9),bi};};
+  const r3=sc(3), r4=sc(4);
+  const meter=(r3.sc>r4.sc*1.15 && r3.sc>0.35)?3:4;
+  const bi=(meter===3?r3:r4).bi;
+  const downbeat=(((bi-q)%meter)+meter)%meter;
+  return {bpm, offset:first, meter, downbeat, conf};
+}
+
+/* ---------- State ---------- */
+const song = new Audio(); song.preload='auto';
+song.preservesPitch=true; song.mozPreservesPitch=true; song.webkitPreservesPitch=true;
+let tracks=[], cur=-1, bpm=100, playing=false, lastN=null, lastCt=0, nextTime=0, freeStep=0, wake=null;
+let tapTimes=[];
+const vis=[]; // {time, idx, kind}
+const track = () => tracks[cur];
+const songMode = () => !!track() && track().ready && $('songOn').checked;
+const patLen = () => pattern.steps.length;
+
+function setBpm(v, fromUser){
+  const t=track();
+  if(t && t.ready) v=clamp(v, t.bpm*0.5, t.bpm*2);
+  bpm=clamp(Math.round(v*10)/10, 30, 240);
+  if(t && t.ready){ song.playbackRate = bpm/t.bpm; }
+  renderTempo();
+}
+function renderTempo(){
+  $('bpmNum').textContent = Number.isInteger(bpm)?bpm:bpm.toFixed(1);
+  $('bpmRange').value = clamp(Math.round(bpm),30,240);
+  const t=track();
+  const h=$('rateHint');
+  if(t&&t.ready&&Math.abs(bpm-t.bpm)>0.5){h.hidden=false;h.textContent='سرعت آهنگ '+fa(Math.round(bpm/t.bpm*100))+'٪ (تمپوی اصلی '+fa(Math.round(t.bpm))+')';}
+  else h.hidden=true;
+}
+function renderChips(){
+  const t=track(), c=$('chips'); c.innerHTML='';
+  const add=txt=>{const s=document.createElement('span');s.className='chip';s.textContent=txt;c.appendChild(s);};
+  if(!t){add('حالت آزاد');return;}
+  if(!t.ready){add('در حال تحلیل…');return;}
+  add('وزن حدسی '+fa(t.meter)+'/۴');
+  add(t.conf>0.6?'اطمینان زیاد':t.conf>0.3?'اطمینان متوسط':'اطمینان کم');
+}
+function renderTracks(){
+  const ul=$('tracks'); ul.innerHTML='';
+  tracks.forEach((t,i)=>{
+    const li=document.createElement('li'); li.className='track'; li.tabIndex=0;
+    li.setAttribute('aria-current', i===cur?'true':'false');
+    const a=document.createElement('span'); a.className='t'; a.textContent=t.name;
+    const b=document.createElement('span'); b.className='b'; b.textContent=t.error?'خطا':t.ready?Math.round(t.bpm)+' BPM':'…';
+    const x=document.createElement('button'); x.className='x'; x.textContent='✕'; x.setAttribute('aria-label','حذف');
+    x.onclick=e=>{e.stopPropagation(); removeTrack(i);};
+    li.append(a,b,x);
+    li.onclick=()=>selectTrack(i);
+    li.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectTrack(i);}};
+    ul.appendChild(li);
+  });
+  $('trackHint').hidden = tracks.length>0 && false;
+}
+function renderNow(){
+  const t=track();
+  $('curName').textContent = t? t.name : 'بدون آهنگ، بندیر آزاد';
+  renderChips(); renderTempo(); renderTracks();
+}
+function defaultShift(){
+  const t=track(); if(!t||!t.ready) return 0;
+  const L=patLen(); if(L%pattern.sub!==0) return 0;
+  return (((-t.downbeat*pattern.sub)%L)+L)%L;
+}
+function renderPattern(){
+  const g=$('grid'); g.innerHTML='';
+  const L=patLen(), cols=L<=8?L:Math.ceil(L/2);
+  g.style.gridTemplateColumns='repeat('+cols+',1fr)';
+  pattern.steps.forEach((k,i)=>{
+    const b=document.createElement('button'); b.className='step '+(k==='.'?'':k)+(i%pattern.sub===0?' beat':'');
+    b.dataset.i=i; b.textContent=k==='.'?'·':k; b.setAttribute('aria-label','گام '+fa(i+1));
+    b.onclick=()=>{const o=['.','D','T','k']; pattern.steps[i]=o[(o.indexOf(k)+1)%4]; pattern.preset=PRESETS.length-1; $('preset').value=pattern.preset; renderPattern();};
+    g.appendChild(b);
+  });
+  document.querySelectorAll('#subdiv button').forEach(b=>b.setAttribute('aria-pressed', +b.dataset.v===pattern.sub));
+  document.querySelectorAll('#subdiv button').forEach(b=>{b.style.background=+b.dataset.v===pattern.sub?'var(--accent)':'';b.style.color=+b.dataset.v===pattern.sub?'var(--accent-ink)':'';});
+}
+function applyPreset(i){
+  const p=PRESETS[i]; pattern.steps=p.steps.split(''); pattern.sub=p.sub; pattern.preset=i; pattern.shift=defaultShift();
+  lastN=null; renderPattern();
+}
+
+/* ---------- Tracks ---------- */
+async function addFiles(files){
+  ensureCtx();
+  $('err').hidden=true;
+  for(const file of files){
+    const t={id:Math.random(),name:file.name.replace(/\.[^.]+$/,''),ready:false,url:URL.createObjectURL(file)};
+    tracks.push(t); if(cur<0) cur=tracks.length-1; renderNow();
+    try{
+      const ab=await file.arrayBuffer();
+      const buf=await ctx.decodeAudioData(ab);
+      t.duration=buf.duration;
+      const r=await analyze(buf);
+      Object.assign(t,r); t.ready=true;
+      if(tracks[cur]===t){ loadSong(t); pattern.shift=defaultShift(); setBpm(t.bpm); }
+    }catch(e){
+      t.error=true; $('err').hidden=false;
+      $('err').textContent='«'+t.name+'» تحلیل نشد: '+(e&&e.message?e.message:'قالب فایل پشتیبانی نمی‌شود');
+    }
+    renderNow();
+  }
+}
+function loadSong(t){ song.src=t.url; song.playbackRate=1; song.load(); }
+function selectTrack(i){
+  const was=playing; if(was) stop();
+  cur=i; const t=track(); lastN=null;
+  if(t&&t.ready){ loadSong(t); pattern.shift=defaultShift(); bpm=t.bpm; setBpm(t.bpm); }
+  renderNow(); renderPattern();
+  if(was&&t&&t.ready) start();
+}
+function removeTrack(i){
+  const was=playing&&i===cur; if(was) stop();
+  URL.revokeObjectURL(tracks[i].url); tracks.splice(i,1);
+  if(!tracks.length){cur=-1; song.removeAttribute('src');}
+  else if(cur>=tracks.length) cur=tracks.length-1;
+  else if(i<cur) cur--;
+  else if(i===cur){ selectTrack(cur); return; }
+  renderNow();
+}
+
+/* ---------- Transport ---------- */
+async function start(){
+  ensureCtx(); playing=true; lastN=null; nextTime=0; freeStep=0;
+  $('playBtn').textContent='■ توقف';
+  if(songMode()){ song.playbackRate=bpm/track().bpm; try{await song.play();}catch(e){} }
+  try{ if(navigator.wakeLock) wake=await navigator.wakeLock.request('screen'); }catch(e){}
+}
+function stop(){
+  playing=false; song.pause(); $('playBtn').textContent='▶ پخش'; lastN=null;
+  try{ if(wake){wake.release();wake=null;} }catch(e){}
+  document.querySelectorAll('.step.now').forEach(e=>e.classList.remove('now'));
+}
+song.addEventListener('ended',()=>{
+  if(!playing) return;
+  if(cur<tracks.length-1 && tracks[cur+1].ready){ selectTrack(cur+1); } else { stop(); song.currentTime=0; }
+});
+song.addEventListener('seeked',()=>{lastN=null;});
+
+function playStep(idx, when){
+  const k=pattern.steps[idx];
+  if(k!=='.') hit(k, when);
+  vis.push({time:when, idx, kind:k});
+}
+const AHEAD=0.18;
+function tick(){
+  if(!playing||!ctx) return;
+  const L=patLen(), sub=pattern.sub;
+  if(songMode()){
+    if(song.paused) return;
+    const t=track(), rate=song.playbackRate, ct=song.currentTime;
+    if(lastN!==null && (ct<lastCt-0.05 || ct>lastCt+1.5)) lastN=null;
+    lastCt=ct;
+    const sd=60/t.bpm/sub, off=t.offset+($('nudge').value/1000)*rate;
+    let n=Math.max(Math.ceil((ct-off)/sd-1e-6), lastN===null?-1e9:lastN+1);
+    if(n<0) n=0;
+    for(;;){
+      const ts=off+n*sd; if(ts>ct+AHEAD*rate) break;
+      const when=ctx.currentTime+(ts-ct)/rate;
+      if(when>=ctx.currentTime-0.02) playStep((((n+pattern.shift)%L)+L)%L, Math.max(when,ctx.currentTime));
+      lastN=n; n++;
+    }
+  } else {
+    const now=ctx.currentTime;
+    if(!nextTime||nextTime<now-0.05) nextTime=now+0.06;
+    while(nextTime<now+AHEAD){
+      playStep((((freeStep+pattern.shift)%L)+L)%L, nextTime);
+      nextTime+=60/bpm/sub; freeStep++;
+    }
+  }
+}
+setInterval(tick,25);
+
+/* visual loop */
+const drum=$('drum');
+let hitTimer=0;
+function frame(){
+  if(ctx){
+    const now=ctx.currentTime;
+    while(vis.length && vis[0].time<=now){
+      const v=vis.shift();
+      if(now-v.time>0.15) continue;
+      document.querySelectorAll('.step.now').forEach(e=>e.classList.remove('now'));
+      const el=document.querySelector('.step[data-i="'+v.idx+'"]'); if(el) el.classList.add('now');
+      if(v.kind!=='.'){
+        drum.className='drum hit'+v.kind; clearTimeout(hitTimer); hitTimer=setTimeout(()=>{drum.className='drum';},90);
+      }
+    }
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ---------- UI wiring ---------- */
+const jing=$('jing'); for(let i=0;i<8;i++){const d=document.createElement('i'); d.style.transform='rotate('+(i*45+22)+'deg)'; jing.appendChild(d);}
+const sel=$('preset'); PRESETS.forEach((p,i)=>{const o=document.createElement('option'); o.value=i; o.textContent=p.name; sel.appendChild(o);});
+sel.onchange=()=>applyPreset(+sel.value);
+[1,2,3,4].forEach(v=>{const b=document.createElement('button'); b.className='btn'; b.dataset.v=v; b.textContent=fa(v); b.style.minWidth='48px';
+  b.onclick=()=>{pattern.sub=v; pattern.shift=defaultShift(); lastN=null; renderPattern();}; $('subdiv').appendChild(b);});
+$('playBtn').onclick=()=>playing?stop():start();
+$('bpmRange').oninput=e=>setBpm(+e.target.value);
+$('m5').onclick=()=>setBpm(bpm-5); $('p5').onclick=()=>setBpm(bpm+5);
+$('m1').onclick=()=>setBpm(bpm-1); $('p1').onclick=()=>setBpm(bpm+1);
+$('half').onclick=()=>{const t=track(); if(t&&t.ready){t.bpm/=2; setBpm(t.bpm); renderTracks(); lastN=null;} else setBpm(bpm/2);};
+$('dbl').onclick=()=>{const t=track(); if(t&&t.ready){t.bpm*=2; setBpm(t.bpm); renderTracks(); lastN=null;} else setBpm(bpm*2);};
+$('reset').onclick=()=>{const t=track(); if(t&&t.ready) setBpm(t.bpm);};
+$('tap').onclick=()=>{
+  const n=performance.now(); if(tapTimes.length&&n-tapTimes[tapTimes.length-1]>2000) tapTimes=[];
+  tapTimes.push(n); if(tapTimes.length>8) tapTimes.shift();
+  if(tapTimes.length>=3){const iv=[];for(let i=1;i<tapTimes.length;i++) iv.push(tapTimes[i]-tapTimes[i-1]); setBpm(60000/(iv.reduce((a,b)=>a+b,0)/iv.length));}
+};
+$('shiftL').onclick=()=>{pattern.shift=(pattern.shift+1)%patLen(); lastN=null;};
+$('shiftR').onclick=()=>{pattern.shift=(pattern.shift-1+patLen())%patLen(); lastN=null;};
+$('lenP').onclick=()=>{if(patLen()<16){pattern.steps.push('.'); pattern.preset=PRESETS.length-1; sel.value=pattern.preset; renderPattern();}};
+$('lenM').onclick=()=>{if(patLen()>2){pattern.steps.pop(); pattern.preset=PRESETS.length-1; sel.value=pattern.preset; renderPattern();}};
+$('files').onchange=e=>{const f=[...e.target.files]; e.target.value=''; if(f.length) addFiles(f);};
+$('volSong').oninput=e=>{song.volume=e.target.value/100; $('volSongO').textContent=e.target.value;};
+$('volBen').oninput=e=>{if(benGain) benGain.gain.value=e.target.value/100; $('volBenO').textContent=e.target.value;};
+$('nudge').oninput=e=>{$('nudgeO').textContent=e.target.value+' ms'; lastN=null;};
+$('songOn').onchange=()=>{ if(playing){ const w=playing; stop(); start(); } };
+song.volume=0.8;
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&playing&&navigator.wakeLock&&!wake) navigator.wakeLock.request('screen').then(w=>wake=w).catch(()=>{}); });
+
+// test hook
+window.__bendir={get tracks(){return tracks;},addFiles};
+renderNow(); renderPattern(); sel.value=0;
+</script>
+
+</body></html>
